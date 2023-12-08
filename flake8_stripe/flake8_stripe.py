@@ -31,8 +31,8 @@ class TypingImportsChecker:
         "NotRequired",
         "Self",
         "Unpack",
-        "Never",
         "Awaitable",
+        "Never",
     ]
 
     allowed_typing_imports = [
