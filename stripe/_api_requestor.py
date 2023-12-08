@@ -261,7 +261,7 @@ class APIRequestor(object):
 
         return None
 
-    def request_headers(self, api_key, method, api_mode):
+    def request_headers(self, api_key, method, api_mode) -> Dict[str, str]:
         user_agent = "Stripe/v1 PythonBindings/%s" % (_version.VERSION,)
         if stripe.app_info:
             user_agent += " " + self.format_app_info(stripe.app_info)
