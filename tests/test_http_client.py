@@ -26,13 +26,6 @@ class StripeClientTestCase(object):
 
 
 class TestNewDefaultHttpClient(StripeClientTestCase):
-    @pytest.fixture(autouse=True)
-    def setup_warnings(self, request_mocks):
-        original_filters = stripe.http_client.warnings.filters[:]
-        stripe.http_client.warnings.simplefilter("ignore")
-        yield
-        stripe.http_client.warnings.filters = original_filters
-
     def check_default(self, none_libs, expected):
         for lib in none_libs:
             setattr(stripe._http_client, lib, None)
@@ -41,18 +34,18 @@ class TestNewDefaultHttpClient(StripeClientTestCase):
 
         assert isinstance(inst, expected)
 
-    def test_new_default_http_client_urlfetch(self):
+    def test_new_default_http_client_urlfetch(self, request_mocks):
         self.check_default((), stripe.http_client.UrlFetchClient)
 
-    def test_new_default_http_client_requests(self):
+    def test_new_default_http_client_requests(self, request_mocks):
         self.check_default(("urlfetch",), stripe.http_client.RequestsClient)
 
-    def test_new_default_http_client_pycurl(self):
+    def test_new_default_http_client_pycurl(self, request_mocks):
         self.check_default(
             ("urlfetch", "requests"), stripe.http_client.PycurlClient
         )
 
-    def test_new_default_http_client_urllib2(self):
+    def test_new_default_http_client_urllib2(self, request_mocks):
         self.check_default(
             ("urlfetch", "requests", "pycurl"),
             stripe.http_client.Urllib2Client,
